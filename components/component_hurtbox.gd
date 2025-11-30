@@ -1,9 +1,8 @@
-extends Node
+extends Area2D
 class_name ComponentHurtbox
-# I'd generally extend a node for
-# but for demo purpose am shortcutting with simple method
 
 @export var entity: Entity
+@export var overlapping_timer: float = 0.1
 
 signal got_hit(by: Entity, damage: int)
 
@@ -14,6 +13,20 @@ func _ready() -> void:
 
 	entity.register_signal(&"got_hit", self)
 	entity.register_method(&"hurtbox_hit", _hurtbox_hit)
+
+	area_entered.connect(_on_area_entered)
+
+func _on_area_entered(area: Area2D) -> void:
+	if area is ComponentHitbox:
+		if area.entity != entity:
+			_hurtbox_hit(area.entity, area.damage)
+			_test_still_overlapping(area)
+
+func _test_still_overlapping(hitbox: ComponentHitbox) -> void:
+	await get_tree().create_timer(overlapping_timer).timeout
+	if overlaps_area(hitbox):
+		_hurtbox_hit(hitbox.entity, hitbox.damage)
+		_test_still_overlapping(hitbox)
 
 func _hurtbox_hit(by: Entity, damage: int) -> void:
 	got_hit.emit(by, 1)

@@ -1,6 +1,7 @@
-[gd_scene load_steps=12 format=3 uid="uid://bmm31v3osl027"]
+[gd_scene load_steps=16 format=3 uid="uid://bmm31v3osl027"]
 
 [ext_resource type="Script" uid="uid://c2rlld8bv8ero" path="res://entity.gd" id="1_6n5s8"]
+[ext_resource type="Script" uid="uid://hq78w5t6df6h" path="res://components/component_move.gd" id="2_4sr0k"]
 [ext_resource type="Texture2D" uid="uid://cr5is65ckpb3s" path="res://icon.svg" id="2_qwgem"]
 [ext_resource type="Script" uid="uid://dtwm2k3efbccg" path="res://components/component_on_death_hide.gd" id="3_sujqc"]
 [ext_resource type="Script" uid="uid://b358al2yrjkqk" path="res://components/component_healthbar.gd" id="4_4sr0k"]
@@ -11,15 +12,22 @@
 [ext_resource type="Material" uid="uid://diy2sutwbq4w3" path="res://particles/DeathParticles.tres" id="9_ahc81"]
 [ext_resource type="Script" uid="uid://bfq17kvji05fp" path="res://components/component_on_death_particles.gd" id="10_5gxqg"]
 [ext_resource type="Script" uid="uid://bd47gjries50h" path="res://components/component_on_death_destroy.gd" id="11_qwgem"]
+[ext_resource type="Script" uid="uid://cipc3iujrcsg2" path="res://components/component_hitbox.gd" id="12_sujqc"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_sujqc"]
+radius = 100.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4sr0k"]
+size = Vector2(120, 120)
 
 [node name="Entity" type="Node2D"]
 script = ExtResource("1_6n5s8")
 metadata/_custom_type_script = "uid://c2rlld8bv8ero"
 
-[node name="Sprite2D" type="Sprite2D" parent="." node_paths=PackedStringArray("entity")]
-texture = ExtResource("2_qwgem")
-script = ExtResource("3_sujqc")
+[node name="Move" type="Node" parent="." node_paths=PackedStringArray("entity")]
+script = ExtResource("2_4sr0k")
 entity = NodePath("..")
+metadata/_custom_type_script = "uid://hq78w5t6df6h"
 
 [node name="Healthbar" type="Node2D" parent="." node_paths=PackedStringArray("entity")]
 position = Vector2(-77, -125)
@@ -31,11 +39,6 @@ metadata/_custom_type_script = "uid://b358al2yrjkqk"
 script = ExtResource("5_c3706")
 entity = NodePath("..")
 metadata/_custom_type_script = "uid://b8txg3g7rxsy7"
-
-[node name="Hurtbox" type="Node" parent="." node_paths=PackedStringArray("entity")]
-script = ExtResource("6_y73vr")
-entity = NodePath("..")
-metadata/_custom_type_script = "uid://bmh4e57rqade8"
 
 [node name="OnDamageParticles" type="GPUParticles2D" parent="." node_paths=PackedStringArray("entity")]
 emitting = false
@@ -62,3 +65,27 @@ entity = NodePath("..")
 script = ExtResource("11_qwgem")
 entity = NodePath("..")
 metadata/_custom_type_script = "uid://bd47gjries50h"
+
+[node name="ComponentHitbox" type="Area2D" parent="." node_paths=PackedStringArray("entity")]
+collision_mask = 0
+script = ExtResource("12_sujqc")
+entity = NodePath("..")
+metadata/_custom_type_script = "uid://cipc3iujrcsg2"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ComponentHitbox"]
+shape = SubResource("CircleShape2D_sujqc")
+debug_color = Color(0.993071, 0, 0.243007, 0.42)
+
+[node name="ComponentHurtbox" type="Area2D" parent="." node_paths=PackedStringArray("entity")]
+collision_layer = 0
+script = ExtResource("6_y73vr")
+entity = NodePath("..")
+metadata/_custom_type_script = "uid://bmh4e57rqade8"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ComponentHurtbox"]
+shape = SubResource("RectangleShape2D_4sr0k")
+
+[node name="Sprite2D" type="Sprite2D" parent="." node_paths=PackedStringArray("entity")]
+texture = ExtResource("2_qwgem")
+script = ExtResource("3_sujqc")
+entity = NodePath("..")
