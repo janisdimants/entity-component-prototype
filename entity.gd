@@ -24,6 +24,7 @@ func register_signal(signal_name: StringName, component: Node) -> void:
 		signal_array.append(component)
 		signals.set(signal_name, signal_array)
 
+
 func connect_to_signal(signal_name: StringName, callable: Callable) -> void:
 	# Connect to existing signals
 	var signal_array: Array = signals.get(signal_name, []) as Array[Node]
@@ -39,8 +40,9 @@ func connect_to_signal(signal_name: StringName, callable: Callable) -> void:
 		connect_requests.append(callable)
 		signal_connects.set(signal_name, connect_requests)
 
+
+## Register method for future requests
 func register_method(method_name: StringName, callable: Callable) -> void:
-	# Register method for future requests
 	var method_array: Array = methods.get(method_name, []) as Array[Callable]
 	if method_array.has(callable):
 		push_error("Method %s already registered for name %s" % [callable, method_name])
@@ -48,8 +50,10 @@ func register_method(method_name: StringName, callable: Callable) -> void:
 		method_array.append(callable)
 		methods.set(method_name, method_array)
 
+
 func get_methods(method_name: StringName) -> Array[Callable]:
 	return methods.get(method_name, []) as Array[Callable]
+
 
 func get_method(method_name: StringName) -> Callable:
 	return methods.get(method_name, [])[0]

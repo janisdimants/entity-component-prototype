@@ -42,6 +42,7 @@ metadata/_custom_type_script = "uid://b8txg3g7rxsy7"
 
 [node name="OnDamageParticles" type="GPUParticles2D" parent="." node_paths=PackedStringArray("entity")]
 emitting = false
+amount = 5
 texture = ExtResource("2_qwgem")
 lifetime = 0.3
 one_shot = true
@@ -52,7 +53,7 @@ entity = NodePath("..")
 
 [node name="OnDeathParticles" type="GPUParticles2D" parent="." node_paths=PackedStringArray("entity")]
 emitting = false
-amount = 20
+amount = 12
 texture = ExtResource("2_qwgem")
 lifetime = 1.02
 one_shot = true

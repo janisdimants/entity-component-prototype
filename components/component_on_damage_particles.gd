@@ -10,8 +10,10 @@ func _ready() -> void:
 
 	emitting = false
 	one_shot = true
-	entity.connect_to_signal(&"took_damage", _on_took_damage)
 
-func _on_took_damage(_damage: int) -> void:
+	entity.connect_to_signal(ComponentHp.GOT_DAMAGED, _on_got_damaged)
+
+
+func _on_got_damaged(_damage: int) -> void:
 	restart()
 	emitting = true

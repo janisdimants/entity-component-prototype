@@ -12,11 +12,13 @@ func _ready() -> void:
 		entity = get_parent()
 	assert(entity)
 
-	entity.connect_to_signal(&"hp_changed", _on_hp_changed)
+	entity.connect_to_signal(ComponentHp.HP_CHANGED, _on_hp_changed)
+
 
 func _on_hp_changed(hp: int) -> void:
 	_hp = hp
 	queue_redraw()
+
 
 func _draw() -> void:
 	for i: int in range(0, _hp):

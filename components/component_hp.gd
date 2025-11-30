@@ -1,6 +1,12 @@
 extends Node
 class_name ComponentHp
 
+const HP_CHANGED: StringName = &"hp_changed"
+const GOT_DAMAGED: StringName = &"got_damaged"
+const DIED: StringName = &"died"
+const DAMAGE: StringName = &"damage"
+const SET_HP: StringName = &"set_hp"
+
 @export var entity: Entity
 
 @export var hp: int = 5:
@@ -9,7 +15,7 @@ class_name ComponentHp
 		hp_changed.emit(value)
 
 signal hp_changed(hp: int)
-signal took_damage(damage: int)
+signal got_damaged(damage: int)
 signal died()
 
 func _ready() -> void:
@@ -17,27 +23,35 @@ func _ready() -> void:
 		entity = get_parent()
 	assert(entity)
 
-	entity.register_signal(&"hp_changed", self)
-	entity.register_signal(&"took_damage", self)
-	entity.register_signal(&"died", self)
+	entity.register_signal(HP_CHANGED, self)
+	entity.register_signal(GOT_DAMAGED, self)
+	entity.register_signal(DIED, self)
 
-	entity.register_method(&"take_damage", take_damage)
+	entity.register_method(SET_HP, set_hp)
+	entity.register_method(DAMAGE, damage)
 
-	entity.connect_to_signal(&"got_hit", _on_got_hit)
+	entity.connect_to_signal(ComponentHurtbox.GOT_HIT, _on_got_hit)
 
 	hp_changed.emit(hp)
 
-func take_damage(damage: int) -> void:
+
+func damage(_damage: int) -> void:
 	if hp <= 0:
 		# Already dead
 		return
 
-	hp -= damage
+	hp -= _damage
 
 	if hp <= 0:
 		died.emit()
 	else:
-		took_damage.emit(damage)
+		got_damaged.emit(_damage)
 
-func _on_got_hit(_by: Entity, damage: int) -> void:
-	take_damage(damage)
+
+func set_hp(value: int) -> void:
+	hp = value
+	hp_changed.emit(value)
+
+
+func _on_got_hit(_by: Entity, _damage: int) -> void:
+	damage(_damage)

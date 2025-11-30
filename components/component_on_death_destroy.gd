@@ -8,7 +8,8 @@ func _ready() -> void:
 		entity = get_parent()
 	assert(entity)
 
-	entity.connect_to_signal(&"died", _on_died)
+	entity.connect_to_signal(ComponentHp.DIED, _on_died)
+
 
 func _on_died() -> void:
 	entity.queue_free()

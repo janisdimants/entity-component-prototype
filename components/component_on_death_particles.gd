@@ -10,7 +10,9 @@ func _ready() -> void:
 
 	emitting = false
 	one_shot = true
-	entity.connect_to_signal(&"died", _on_died)
+
+	entity.connect_to_signal(ComponentHp.DIED, _on_died)
+
 
 func _on_died() -> void:
 	reparent(entity.get_parent(), true)
